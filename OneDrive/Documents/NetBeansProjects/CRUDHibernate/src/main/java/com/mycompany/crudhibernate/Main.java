@@ -31,15 +31,17 @@ public class Main {
         
         System.out.println("X-- Aplicación para comandas --X");
         int seleccionMenu = 0;
+        boolean menuActivo = true;
         Scanner input = new Scanner(System.in);
         
-        while(seleccionMenu != 7) {
+        while(menuActivo) {
             System.out.println("1- Listar carta disponible");
             System.out.println("2- Listar todos los pedidos");
             System.out.println("3- Listar los pedidos de hoy");
             System.out.println("4- Crear un pedido");
             System.out.println("5- Borrar un pedido");
             System.out.println("6- Marcar pedido como recogido");
+            System.out.println("7- Salir");
             
             seleccionMenu = input.nextInt();
             switch(seleccionMenu) {
@@ -54,6 +56,8 @@ public class Main {
                 case 5: borrarPedido();
                 break;
                 case 6: marcarRecogido();
+                break;
+                case 7: menuActivo = false;
                 break;
                 default: System.out.println("Elija una opción válida");
             }
