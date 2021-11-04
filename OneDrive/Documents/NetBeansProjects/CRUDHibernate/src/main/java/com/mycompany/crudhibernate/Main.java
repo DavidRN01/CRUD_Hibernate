@@ -8,8 +8,10 @@ package com.mycompany.crudhibernate;
 import java.util.ArrayList;
 import java.util.Scanner;
 import models.Carta;
+import models.Pedido;
 import org.hibernate.Session;
 import org.hibernate.SessionFactory;
+import org.hibernate.Transaction;
 import org.hibernate.cfg.Configuration;
 import org.hibernate.query.Query;
 
@@ -33,10 +35,14 @@ public class Main {
         
         while(seleccionMenu != 7) {
             System.out.println("1- Listar carta disponible");
+            System.out.println("2- Crear un pedido");
             
             seleccionMenu = input.nextInt();
             switch(seleccionMenu) {
                 case 1: listarCarta();
+                break;
+                case 2: crearPedido();
+                break;
                 default: System.out.println("Elija una opción válida");
             }
         }
@@ -44,16 +50,40 @@ public class Main {
     }
     
     public static void listarCarta() {
-        SessionFactory sf = new Configuration().configure().buildSessionFactory();
-        Session s = sf.openSession();
         
         Query q = s.createQuery("FROM Carta", Carta.class);
         ArrayList<Carta> resultado = (ArrayList<Carta>) q.list();
         
         resultado.forEach((c) -> System.out.println(c));
+        
     }
     
-    public static void anhadirPedido() {
+    public static void crearPedido() {
+        
+        Pedido pedido = new Pedido();
+        Scanner input = new Scanner(System.in);
+        Scanner id_input = new Scanner(System.in);
+        
+        listarCarta();
+        System.out.print("Introduce el id del producto que desea: ");
+        Long id = id_input.nextLong();
+        System.out.print("Introduce un nombre para el pedido: ");
+        String nombre = input.nextLine();
+        
+        Carta producto = s.load(Carta.class, id);
+        java.util.Date ahora = new java.util.Date();
+        java.sql.Date fecha = new java.sql.Date(ahora.getTime());
+        
+        pedido.setId(0L);
+        pedido.setProducto_id(id);
+        pedido.setNombre(nombre);
+        pedido.setEstado("SIN ENTREGAR");
+        pedido.setPrecio(producto.getPrecio());
+        pedido.setFecha(fecha);
+        
+        Transaction t = s.beginTransaction();
+        s.save(pedido);
+        t.commit();
         
     }
     
